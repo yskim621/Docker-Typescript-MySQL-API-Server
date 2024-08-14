@@ -40,6 +40,7 @@ export async function getAllUsers(): Promise<users[]> {
 }
 
 export async function getUser(id: string) {
+    console.log('database.ts >> getUser() call!!!!!!!!!!!!!!!!~~~~~~~~~~~~~~~~~');
     const [rows] = await pool.promise().query(`
         SELECT * 
         FROM users
