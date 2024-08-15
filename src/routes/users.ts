@@ -16,33 +16,39 @@ router.get('/', (req:Request,res:Response) => res.send('<h1>Users API Server</h1
 router.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const resultObj: object = {
-            responseCode: 200,
+            responseCode: 400,
             resultCode: 'fail',
             resultMsg: '사용자 생성에 실패하였습니다.',
         };
         const id: string = req.body.id;
         const pw: string = req.body.pw;
         const phone: string = req.body.phone;
+        console.log('routes/uesrs/ >> id:' + id);
 
         if (!id) {
-            resultObj['responseCode'] = 400;
-            resultObj['resultCode'] = 'fail';
             resultObj['resultMsg'] = '아이디를 입력해주세요.';
-            return resultObj;
+            res.send(resultObj);
+            return;
+        }
+
+        const isPassed = await userService.checkDuplicatedId(id);
+        if (isPassed === false) {
+            console.log('routes/users >>> isPassed = false!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            resultObj['resultMsg'] = '중복된 아이디입니다. 다른 아이디를 입력해주세요.';
+            res.send(resultObj);
+            return;
         }
 
         if (!pw) {
-            resultObj['responseCode'] = 400;
-            resultObj['resultCode'] = 'fail';
             resultObj['resultCode'] = '비밀번호를 입력해주세요.';
-            return resultObj;
+            res.send(resultObj);
+            return;
         }
 
         if (!phone) {
-            resultObj['responseCode'] = 400;
-            resultObj['resultCode'] = 'fail';
             resultObj['resultCode'] = '휴대폰 번호를 입력해주세요.';
-            return resultObj;
+            res.send(resultObj);
+            return;
         }
 
         await userService.createUser(id, pw, phone);

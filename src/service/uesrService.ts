@@ -42,11 +42,18 @@ async function deleteUser(id: string, token: string) {
 }
 
 
+async function checkDuplicatedId(id: string) {
+    const user: userMngt = await db.getUser(id);
+    console.log('user: ' + user);
+
+    return !user;
+}
 
 export default {
     createUser,
     getUsers,
     getUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    checkDuplicatedId
 }
