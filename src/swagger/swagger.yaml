@@ -1,0 +1,225 @@
+openapi: 3.0.0
+info:
+  title: 마인즈에이아이 과제 API 문서
+  description: 마인즈에이아이 API 명세서
+  contact:
+    email: yskim93621@naver.com
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3000'
+tags:
+  - name: auth
+    description: auth API index
+  - name: user
+    description: user API index
+
+paths:
+  /api/auth/signIn:
+    post:
+      tags:
+        - auth
+      summary: sign in to get JWT
+      description: ''
+      operationId: sign in
+      parameters:
+        - name: id
+          in: query
+          description: 사용자 아이디
+          required: true
+          schema:
+            type: string
+        - name: pw
+          in: query
+          description: 사용자 패스워드
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Invalid userId/password supplied
+
+
+  /api/user/create:
+    post:
+      tags:
+        - user
+      summary: Create user
+      description: Creating uesr without JWT
+      operationId: createUser
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 사용자 아이디
+        - name: pw
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 사용자 패스워드
+        - name: phone
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 사용자 휴대폰 번호
+
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /api/user/list:
+    post:
+      tags:
+        - user
+      summary: Creates list of users with given input array
+      description: Creates list of users with given input array
+      operationId: createUsersWithListInput
+      parameters:
+        - name: authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: 해더 내 토큰('Bearer '로 시작)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              items:
+                $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /api/user/get:
+    post:
+      tags:
+        - user
+      summary: Logs out current logged in user session
+      description: ''
+      operationId: getUser
+      parameters:
+        - name: authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: 해더 내 토큰('Bearer '로 시작)
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 사용자 아이디
+      responses:
+        default:
+          description: successful operation
+  /api/user/update:
+    post:
+      tags:
+        - user
+      summary: Update user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      parameters:
+        - name: authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: 해더 내 토큰('Bearer '로 시작)
+        - name: id
+          in: query
+          description: name that need to be deleted
+          required: true
+          schema:
+            type: string
+        - name: phone
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 사용자 휴대폰 번호
+      requestBody:
+        description: Update an existent user in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+  /api/user/delete:
+    post:
+      tags:
+        - user
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
+      parameters:
+        - name: authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: 해더 내 토큰('Bearer '로 시작)
+        - name: id
+          in: query
+          description: The name that needs to be deleted
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'user1'
+        pw:
+          type: string
+          example: '1111'
+        phone:
+          type: string
+          example: '01011111111'
+    ApiResponse:
+      type: object
+      properties:
+        responseCode:
+          type: integer
+          format: int32
+        resultCode:
+          type: string
+        resultMsg:
+          type: string
+        body:
+          type: object

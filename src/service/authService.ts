@@ -39,12 +39,12 @@ async function verifyToken(token: string) {
     let result: boolean = false;
     try {
         const extractedToken = await extractTokenFromReq(token);
-        console.log('extractedToken::' + extractedToken);
+        // console.log('extractedToken::' + extractedToken);
 
         // const decodedToken = jwt.verify(extractedToken, process.env.JWT_SECRET_KEY);
         const secretKey: string = process.env.JWT_SECRET_KEY;
         const decodedToken = jwt.verify(extractedToken, secretKey);
-        console.log('decodedToken::' + JSON.stringify(decodedToken));
+        // console.log('decodedToken::' + JSON.stringify(decodedToken));
         // console.log('decodedToken::' + decodedToken.userId);
         if (!decodedToken) {
             console.log('This is incorrect, please sign in first with accurate information');

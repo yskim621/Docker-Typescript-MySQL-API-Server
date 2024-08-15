@@ -53,6 +53,7 @@ router.post('/create', async (req: Request, res: Response, next: NextFunction) =
 
         await userService.createUser(id, pw, phone);
 
+        resultObj['responseCode'] = 200;
         resultObj['resultCode'] = 'success';
         resultObj['resultMsg'] = '정상 처리 되었습니다.';
         res.send(resultObj);
@@ -83,6 +84,7 @@ router.post('/list', async (req: Request, res: Response, next: NextFunction) => 
         const users = await userService.getUsers(token);
         resultObj['body'] = users;
 
+        resultObj['responseCode'] = 200;
         resultObj['resultCode'] = 'success';
         resultObj['resultMsg'] = '정상 처리 되었습니다.';
 
@@ -116,6 +118,7 @@ router.get('/get', async (req: Request, res: Response, next: NextFunction) => {
         const user = await userService.getUser(id, token);
         resultObj['body'] = user;
 
+        resultObj['responseCode'] = 200;
         resultObj['resultCode'] = 'success';
         resultObj['resultMsg'] = '정상 처리 되었습니다.';
 
@@ -158,6 +161,7 @@ router.post('/update', async (req: Request, res: Response, next: NextFunction) =
         const user = await userService.updateUser(id, phone, token);
         resultObj['body'] = user;
 
+        resultObj['responseCode'] = 200;
         resultObj['resultCode'] = 'success';
         resultObj['resultMsg'] = '정상 처리 되었습니다.';
 
@@ -191,6 +195,7 @@ router.post('/delete', async (req: Request, res: Response, next: NextFunction) =
 
         await userService.deleteUser(id, token);
 
+        resultObj['responseCode'] = 200;
         resultObj['resultCode'] = 'success';
         resultObj['resultMsg'] = '정상 처리 되었습니다.';
         res.send(resultObj);
